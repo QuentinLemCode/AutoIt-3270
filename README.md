@@ -67,6 +67,12 @@ zGetStringBlock($iXstart, $iYstart, $iXend, $iYend)
 Get all the character in the block
 
 ```` autoit
+zGetScreen()
+````
+
+Get the entire screen
+
+```` autoit
 zIsStringInScreenPos($sCheck, $iX, $iY, $iLen)
 ````
 
