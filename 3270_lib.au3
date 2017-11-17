@@ -121,6 +121,15 @@ Func zIsStringInScreenPos($sCheck, $iX, $iY, $iLen)
 	Return SetError(0, 0, False)
 EndFunc   ;==>zIsStringInScreenPos
 
+Func zGetScreen()
+	If (__check3270() <> 0) Then Return SetError(@error, @extended, __check3270())
+
+	$sRet = __call3270('ascii')
+	If (@error) Then Return SetError(@error, @extended, $sRet)
+
+	Return $sRet
+EndFunc   ;==>zGetScreen
+
 Func zIsStringInScreen($sCheck)
 	If (__check3270() <> 0) Then Return SetError(@error, @extended, __check3270())
 
