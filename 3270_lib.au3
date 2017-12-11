@@ -239,12 +239,12 @@ Func __HttpGet($sURL, $sData = "")
 	Local $oHTTP = ObjCreate("Microsoft.XMLHTTP")
 	Local $sRequest = $sURL & $sData
 	$oHTTP.Open("GET", $sRequest, False)
-	If (@error) Then Return SetError(1, 0, 0)
+	If (@error) Then Return SetError(1, 0, "Error with request : " & $sRequest)
 
 	$oHTTP.withCredentials = True
 	$oHTTP.send()
 
-	If (@error) Then Return SetError(2, 0, 0)
+	If (@error) Then Return SetError(2, 0, "Error with request : " & $sRequest)
 
-	Return SetError(0, 0, "Request : " & $sRequest & @CRLF & $oHTTP.responseText)
+	Return SetError(0, 0, $oHTTP.responseText)
 EndFunc   ;==>__HttpGet
