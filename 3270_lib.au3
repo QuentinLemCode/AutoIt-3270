@@ -233,9 +233,12 @@ Func __check3270()
 EndFunc   ;==>__check3270
 
 Func __HttpGet($sURL, $sData = "")
-
+	If($sData <> "") Then
+		$sData = "?" & $sData
+	EndIf
 	Local $oHTTP = ObjCreate("Microsoft.XMLHTTP")
-	$oHTTP.Open("GET", $sURL & "?" & $sData, False)
+	Local $sRequest = $sURL & $sData
+	$oHTTP.Open("GET", $sRequest, False)
 	If (@error) Then Return SetError(1, 0, 0)
 
 	$oHTTP.withCredentials = True
@@ -243,5 +246,5 @@ Func __HttpGet($sURL, $sData = "")
 
 	If (@error) Then Return SetError(2, 0, 0)
 
-	Return SetError(0, 0, $oHTTP.responseText)
+	Return SetError(0, 0, "Request : " & $sRequest & @CRLF & $oHTTP.responseText)
 EndFunc   ;==>__HttpGet
