@@ -106,7 +106,7 @@ EndFunc   ;==>zGetStringPos
 
 Func zGetStringBlock($iXstart, $iYstart, $iXend, $iYend)
 	If (__check3270() <> 0) Then Return SetError(@error, @extended, __check3270())
-	Local $sRet = __call3270("ascii(" & $iXstart & "," & $iYstart & "," & $iXend & "," & $iYend & ")")
+	Local $sRet = __call3270("ascii(" & $iXstart & "," & $iYstart & "," & ($iXend - $iXstart) & "," & ($iYend - $iYstart) & ")")
 	If (@error) Then Return SetError(@error, @extended, $sRet)
 	Return SetError(0, 0, $sRet)
 EndFunc   ;==>zGetStringBlock
