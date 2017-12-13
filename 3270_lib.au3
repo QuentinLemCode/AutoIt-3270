@@ -91,7 +91,7 @@ EndFunc   ;==>zMoveCursor
 
 Func zPutString($sStr)
 	If (__check3270() <> 0) Then Return SetError(@error, @extended, __check3270())
-	Local $sRet = __call3270("String(""" & $sStr & """)")
+	Local $sRet = __call3270("String(""" & __zURIEncode($sStr) & """)")
 	If (@error) Then Return SetError(@error, @extended, $sRet)
 	Return SetError(0, 0, $sRet)
 EndFunc   ;==>zPutString
@@ -248,3 +248,19 @@ Func __HttpGet($sURL, $sData = "")
 
 	Return SetError(0, 0, $oHTTP.responseText)
 EndFunc   ;==>__HttpGet
+
+Func __zURIEncode($sData)
+    Local $aData = StringSplit(BinaryToString(StringToBinary($sData,4),1),"")
+    Local $nChar
+    $sData=""
+    For $i = 1 To $aData[0]
+        $nChar = Asc($aData[$i])
+        Switch $nChar
+            Case 45, 46, 48 To 57, 65 To 90, 95, 97 To 122, 126
+                $sData &= $aData[$i]
+            Case Else
+                $sData &= "%" & Hex($nChar,2)
+        EndSwitch
+    Next
+    Return $sData
+EndFunc
