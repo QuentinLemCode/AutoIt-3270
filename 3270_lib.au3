@@ -247,7 +247,6 @@ Func __HttpGet($sURL, $sData = "")
 	If($oHTTP.status <> 200) Then Return SetError(3, $oHTTP.status, _
 		"Error with request : " & $sRequest & " - HTTP Code : " & $oHttp.status & " " & _
 		$oHttp.statusText & @CRLF )
-	ConsoleWrite($oHTTP.status)
 
 	If (@error) Then Return SetError(2, 0, "Error with request : " & $sRequest)
 
