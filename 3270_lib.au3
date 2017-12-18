@@ -238,18 +238,28 @@ Func __HttpGet($sURL, $sData = "")
 	EndIf
 	Local $oHTTP = ObjCreate("Microsoft.XMLHTTP")
 	Local $sRequest = $sURL & $sData
-	$oHTTP.Open("GET", $sRequest, False)
+	$oHTTP.open("GET", $sRequest, False)
 	If (@error) Then Return SetError(1, 0, "Error with request : " & $sRequest)
 
 	$oHTTP.withCredentials = True
 	$oHTTP.send()
-
-	If($oHTTP.status <> 200) Then Return SetError(3, $oHTTP.status, _
-		"Error with request : " & $sRequest & " - HTTP Code : " & $oHttp.status & " " & _
-		$oHttp.statusText & @CRLF )
-
 	If (@error) Then Return SetError(2, 0, "Error with request : " & $sRequest)
 
+	If($oHTTP.status == 409) Then
+		; In case of 409 conflict, let's wait and retry
+		Sleep(200)
+		$oHTTP.open("GET", $sRequest, False)
+		If (@error) Then Return SetError(1, 0, "Error with request : " & $sRequest)
+		$oHTTP.withCredentials = True
+		$oHTTP.send()
+		If (@error) Then Return SetError(2, 0, "Error with request : " & $sRequest)
+	ElseIf($oHTTP.status <> 200) Then 
+		Return SetError(3, $oHTTP.status, _
+			"Error with request : " & $sRequest & " - HTTP Code : " & _
+			$oHttp.status & " " & $oHttp.statusText & @CRLF )
+	EndIf
+
+	
 	Return SetError(0, 0, $oHTTP.responseText)
 EndFunc   ;==>__HttpGet
 
